@@ -97,6 +97,7 @@ function create() {
 
     //  And some controls to play the game with
     cursors = game.input.keyboard.createCursorKeys();
+    pointer1 = game.input.addPointer();    
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     
 }
@@ -141,12 +142,14 @@ function descend() {
 
 function update() {
 
+    // continously fire weapon
+    fireBullet();
     //  Scroll the background
     starfield.tilePosition.y += 2;
 
     //  Reset the player, then check for movement keys
     player.body.velocity.setTo(0, 0);
-
+    // Movement keyboard
     if (cursors.left.isDown)
     {
         player.body.velocity.x = -200;
@@ -156,7 +159,14 @@ function update() {
         player.body.velocity.x = 200;
     }
 
-    //  Firing?
+    // set x and y location based on touch input
+    if (game.input.pointer1.isDown)
+    {
+        player.body.x =  game.input.pointer1.x;  
+        player.body.y = game.input.pointer1.y;      
+    }
+
+    //  Firing keyboard?
     if (fireButton.isDown)
     {
         fireBullet();
@@ -195,7 +205,7 @@ function collisionHandler (bullet, alien) {
     //  And create an explosion :)
     var explosion = explosions.getFirstExists(false);
     explosion.reset(alien.body.x, alien.body.y);
-    explosion.play('kaboom', 30, false, true);
+    explosion.play('kaboom', 30, false, true);    
 
     if (aliens.countLiving() == 0)
     {
