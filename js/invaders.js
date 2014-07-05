@@ -284,7 +284,7 @@ function fireBullet () {
         if (bullet)
         {
             //  And fire it
-            bullet.reset(player.x, player.y + 8);
+            bullet.reset(player.x, player.y - 20);
             bullet.body.velocity.y = -400;
             bulletTime = game.time.now + 200;
         }
