@@ -29,6 +29,7 @@ var enemyBullet;
 var firingTimer = 0;
 var stateText;
 var livingEnemies = [];
+var waveCount = 1;
 
 function create() {
 
@@ -217,12 +218,12 @@ function collisionHandler (bullet, alien) {
         scoreText.text = scoreString + score;
 
         enemyBullets.callAll('kill',this);
-        loadNextWave();
-        stateText.text = " You Won, \n Click to restart";
-        stateText.visible = true;
+        loadNextWave(this);
+        // stateText.text = " You Won, \n Click to restart";
+        // stateText.visible = true;
 
-        //the "click to restart" handler
-        game.input.onTap.addOnce(restart,this);
+        // //the "click to restart" handler
+        // game.input.onTap.addOnce(restart,this);
     }
 
 }
@@ -314,26 +315,16 @@ function resetBullet (bullet) {
 
 }
 
-/*function loadNextWave () {
+function loadNextWave () {
 
-    //  A new level starts    
-    timeout = game.time.now + 5000;   
-
-    do
-    {
-        stateText.text = " Loading next wave";
-        stateText.visible = true;
-    }
-    while(game.time.now < timeout);
-    
-    //   hides the text
-    stateText.visible = false;
-     //  And brings the aliens back from the dead :)
+    //  And brings the aliens back from the dead :)
     aliens.removeAll();
     createAliens();
+    stateText.text = " Loading next wave";
+    stateText.visible = true;
+    game.time.events.add(Phaser.Timer.SECOND * 4, function(){stateText.visible = false;})
     
-
-}*/
+}
 
 function restart () {
 
