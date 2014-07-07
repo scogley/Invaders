@@ -317,12 +317,12 @@ function resetBullet (bullet) {
 
 function loadNextWave () {
 
-    //  And brings the aliens back from the dead :)
-    aliens.removeAll();
-    createAliens();
-    stateText.text = " Loading next wave";
-    stateText.visible = true;
-    game.time.events.add(Phaser.Timer.SECOND * 4, function(){stateText.visible = false;})
+    //  And brings the aliens back from the dead :)    
+    waveCount ++;
+    stateText.text = " Incoming Wave " + waveCount;
+    stateText.visible = true;    
+    // set a timer to spawn the next wave of baddies and hide the text
+    game.time.events.add(Phaser.Timer.SECOND * 4, function(){stateText.visible = false;aliens.removeAll(); createAliens();})    
     
 }
 
