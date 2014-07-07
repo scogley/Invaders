@@ -99,6 +99,10 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
     pointer1 = game.input.addPointer();    
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+    // stretch to fill fullscreen
+    game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+    game.scale.startFullScreen();
     
 }
 
@@ -213,6 +217,7 @@ function collisionHandler (bullet, alien) {
         scoreText.text = scoreString + score;
 
         enemyBullets.callAll('kill',this);
+        loadNextWave();
         stateText.text = " You Won, \n Click to restart";
         stateText.visible = true;
 
@@ -308,6 +313,27 @@ function resetBullet (bullet) {
     bullet.kill();
 
 }
+
+/*function loadNextWave () {
+
+    //  A new level starts    
+    timeout = game.time.now + 5000;   
+
+    do
+    {
+        stateText.text = " Loading next wave";
+        stateText.visible = true;
+    }
+    while(game.time.now < timeout);
+    
+    //   hides the text
+    stateText.visible = false;
+     //  And brings the aliens back from the dead :)
+    aliens.removeAll();
+    createAliens();
+    
+
+}*/
 
 function restart () {
 
