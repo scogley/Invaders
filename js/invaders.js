@@ -1,5 +1,5 @@
 //invader foo
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'myInvaders', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(640, 960, Phaser.AUTO, 'myInvaders', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
 
@@ -374,6 +374,9 @@ function restart () {
     createAliens('invader1');
     //revives the player
     player.revive();
+    // reset starting position
+    // player.body.x = 400;
+    // player.body.y = 500;
     
 
 }
