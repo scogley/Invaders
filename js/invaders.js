@@ -10,7 +10,7 @@ function preload() {
     game.load.image('invader3', 'assets/smiley.png', 16, 16);
     game.load.image('ship', 'assets/player.png');
     game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
-    game.load.image('starfield', 'assets/starfield.png');   
+    game.load.image('starfield', 'assets/starfield2.png');   
     game.load.image('knightHawks', 'assets/KNIGHT3.png');
     //game.load.image('raidenFonts', 'assets/Raiden Fighters (Seibu).png');
 
@@ -34,7 +34,6 @@ var firingTimer = 0;
 var stateText;
 var livingEnemies = [];
 var waveCount = 1;
-//TODO: why doesn't this var check work?
 var gameisrunning = 1;
 var font;
 
@@ -43,7 +42,7 @@ function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
     //  The scrolling starfield background
-    starfield = game.add.tileSprite(0, 0, 800, 600, 'starfield');
+    starfield = game.add.tileSprite(0, 0, 640, 1920, 'starfield');
 
     //  Our bullet group
     bullets = game.add.group();
@@ -176,20 +175,20 @@ function update() {
     // Movement keyboard
     if (cursors.left.isDown)
     {
-        player.body.velocity.x = -200;
+        player.body.velocity.x = -400;
     }
     if (cursors.right.isDown)
     {
-        player.body.velocity.x = 200;
+        player.body.velocity.x = 400;
     }
     if (cursors.up.isDown)
     {
-        player.body.velocity.y = -200;
+        player.body.velocity.y = -400;
     }
 
     if (cursors.down.isDown)
     {
-        player.body.velocity.y = 200;
+        player.body.velocity.y = 400;
     }
 
     // set x and y location based on touch input
@@ -314,8 +313,8 @@ function enemyFires () {
         // And fire the bullet from this enemy
         enemyBullet.reset(shooter.body.x, shooter.body.y);
 
-        game.physics.arcade.moveToObject(enemyBullet,player,120);
-        firingTimer = game.time.now + 2000;
+        game.physics.arcade.moveToObject(enemyBullet,player,300);
+        firingTimer = game.time.now + 300;
     }
 
 }
