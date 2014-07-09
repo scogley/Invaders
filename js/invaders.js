@@ -10,8 +10,10 @@ function preload() {
     game.load.image('invader3', 'assets/smiley.png', 16, 16);
     game.load.image('ship', 'assets/player.png');
     game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
-    game.load.image('starfield', 'assets/starfield.png');
-    //game.load.image('background', 'assets/games/starstruck/background2.png');
+    game.load.image('starfield', 'assets/starfield.png');   
+    game.load.image('knightHawks', 'assets/KNIGHT3.png');
+    //game.load.image('raidenFonts', 'assets/Raiden Fighters (Seibu).png');
+
 
 }
 
@@ -32,7 +34,9 @@ var firingTimer = 0;
 var stateText;
 var livingEnemies = [];
 var waveCount = 1;
-var gameisrunning = true;
+//TODO: why doesn't this var check work?
+var gameisrunning = 1;
+var font;
 
 function create() {
 
@@ -82,9 +86,19 @@ function create() {
     game.add.text(game.world.width - 100, 10, 'Lives : ', { font: '34px Arial', fill: '#fff' });
 
     //  Text
-    stateText = game.add.text(game.world.centerX,game.world.centerY,' ', { font: '84px Arial', fill: '#fff' });
-    stateText.anchor.setTo(0.5, 0.5);
-    stateText.visible = false;
+    // stateText = game.add.text(game.world.centerX,game.world.centerY,' ', { font: '84px Arial', fill: '#fff' });
+    // stateText.anchor.setTo(0.5, 0.5);
+    // stateText.visible = false;
+
+    font = game.add.retroFont('knightHawks', 31, 25, Phaser.RetroFont.TEXT_SET6, 10, 1, 1);
+
+    for (var c = 0; c < 19; c++)
+    {
+        var i = game.add.image(game.world.centerX, c * 32, font);
+        i.tint = Math.random() * 0xFFFFFF;
+        i.anchor.set(0.5, 1);
+    }
+
 
     for (var i = 0; i < 3; i++) 
     {
@@ -151,7 +165,9 @@ function descend() {
 function update() {
 
     // continously fire weapon
-    fireBullet();
+    if (gameisrunning == 1){
+        fireBullet();
+    }
     //  Scroll the background
     starfield.tilePosition.y += 2;
 
@@ -261,9 +277,12 @@ function enemyHitsPlayer (player,bullet) {
     {
         player.kill();
         enemyBullets.callAll('kill');
+        gameisrunning = 0;
 
-        stateText.text=" GAME OVER \n Click to restart";
-        stateText.visible = true;
+        font.text = 'GAME OVER'
+
+        //stateText.text=" GAME OVER \n Click to restart";
+        //stateText.visible = true;
 
         //the "click to restart" handler
         game.input.onTap.addOnce(restart,this);
@@ -331,28 +350,30 @@ function loadNextWave () {
 
     //  And brings the aliens back from the dead :)    
     waveCount ++;
-    stateText.text = " Incoming Wave " + waveCount;
-    stateText.visible = true;  
+    font.text = 'Incoming Wave' + waveCount;
+    //stateText.text = " Incoming Wave " + waveCount;
+    //stateText.visible = true;  
     var invaderName = 'invader' + waveCount;
     // set a timer to spawn the next wave of baddies and hide the text
-    game.time.events.add(Phaser.Timer.SECOND * 4, function(){stateText.visible = false;aliens.removeAll(); createAliens(invaderName);})    
+    game.time.events.add(Phaser.Timer.SECOND * 4, function(){font.text = '';aliens.removeAll(); createAliens(invaderName);})    
     
 }
 
 function restart () {
-
-    //  A new level starts
+    // set boolean game is running to true
+    gameisrunning = 1;
+    // hide the game over font text
+    font.text = '';    
     // reset the score
     score = 0;
     //resets the life count
     lives.callAll('revive');
     //  And brings the aliens back from the dead :)
     aliens.removeAll();
+    // spawn the first wave of aliens
     createAliens('invader1');
-
     //revives the player
     player.revive();
-    //hides the text
-    stateText.visible = false;
+    
 
 }
