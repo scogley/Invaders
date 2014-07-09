@@ -5,7 +5,9 @@ function preload() {
 
     game.load.image('bullet', 'assets/bullet.png');
     game.load.image('enemyBullet', 'assets/enemy-bullet.png');
-    game.load.spritesheet('invader', 'assets/invader32x32x4.png', 32, 32);
+    game.load.spritesheet('invader1', 'assets/invader32x32x4.png', 32, 32);
+    game.load.image('invader2', 'assets/greenInvader.png', 16, 16);
+    game.load.image('invader3', 'assets/smiley.png', 16, 16);
     game.load.image('ship', 'assets/player.png');
     game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
     game.load.image('starfield', 'assets/starfield.png');
@@ -30,6 +32,7 @@ var firingTimer = 0;
 var stateText;
 var livingEnemies = [];
 var waveCount = 1;
+var gameisrunning = true;
 
 function create() {
 
@@ -68,7 +71,7 @@ function create() {
     aliens.enableBody = true;
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
 
-    createAliens();
+    createAliens('invader1');
 
     //  The score
     scoreString = 'Score : ';
@@ -102,18 +105,18 @@ function create() {
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     // stretch to fill fullscreen
-    game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-    game.scale.startFullScreen();
+    //game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+    //game.scale.startFullScreen();
     
 }
 
-function createAliens () {
-
+function createAliens (alientype) {    
     for (var y = 0; y < 4; y++)
     {
         for (var x = 0; x < 10; x++)
         {
-            var alien = aliens.create(x * 48, y * 50, 'invader');
+            // var alien = aliens.create(x * 48, y * 50, 'invader');
+            var alien = aliens.create(x * 48, y * 50, alientype);
             alien.anchor.setTo(0.5, 0.5);
             alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
             alien.play('fly');
@@ -159,9 +162,18 @@ function update() {
     {
         player.body.velocity.x = -200;
     }
-    else if (cursors.right.isDown)
+    if (cursors.right.isDown)
     {
         player.body.velocity.x = 200;
+    }
+    if (cursors.up.isDown)
+    {
+        player.body.velocity.y = -200;
+    }
+
+    if (cursors.down.isDown)
+    {
+        player.body.velocity.y = 200;
     }
 
     // set x and y location based on touch input
@@ -320,21 +332,23 @@ function loadNextWave () {
     //  And brings the aliens back from the dead :)    
     waveCount ++;
     stateText.text = " Incoming Wave " + waveCount;
-    stateText.visible = true;    
+    stateText.visible = true;  
+    var invaderName = 'invader' + waveCount;
     // set a timer to spawn the next wave of baddies and hide the text
-    game.time.events.add(Phaser.Timer.SECOND * 4, function(){stateText.visible = false;aliens.removeAll(); createAliens();})    
+    game.time.events.add(Phaser.Timer.SECOND * 4, function(){stateText.visible = false;aliens.removeAll(); createAliens(invaderName);})    
     
 }
 
 function restart () {
 
     //  A new level starts
-    
+    // reset the score
+    score = 0;
     //resets the life count
     lives.callAll('revive');
     //  And brings the aliens back from the dead :)
     aliens.removeAll();
-    createAliens();
+    createAliens('invader1');
 
     //revives the player
     player.revive();
