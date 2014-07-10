@@ -369,7 +369,9 @@ function restart () {
     lives.callAll('revive');
     //  And brings the aliens back from the dead :)
     aliens.removeAll();
-    // spawn the first wave of aliens
+    // remove all the alien bullets
+    enemyBullets.callAll('kill');    
+    // spawn the first wave of aliens    
     createAliens('invader1');
     //revives the player
     player.revive();
