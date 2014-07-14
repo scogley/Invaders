@@ -3,8 +3,8 @@ var game = new Phaser.Game(640, 960, Phaser.AUTO, 'myInvaders', { preload: prelo
 
 function preload() {
 
-    game.load.image('bullet', 'assets/banana.png');
-    //game.load.image('bullet', 'assets/bullet.png');
+    //game.load.image('bullet', 'assets/banana.png');
+    game.load.image('bullet', 'assets/bullet.png');
     game.load.image('enemyBullet', 'assets/enemy-bullet.png');
     game.load.spritesheet('invader3', 'assets/invader32x32x4.png', 32, 32);
     game.load.image('invader2', 'assets/greenInvader.png', 16, 16);
@@ -121,10 +121,20 @@ function create() {
     pointer1 = game.input.addPointer();    
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
-    // stretch to fill fullscreen
-    //game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-    //game.scale.startFullScreen();
-    
+    // set full screen display. See fullscreen mobile example project for details
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    this.scale.minWidth = 480;
+    this.scale.minHeight = 260;
+    this.scale.maxWidth = 640;
+    this.scale.maxHeight = 960;
+    this.scale.pageAlignHorizontally = true;
+    this.scale.pageAlignVertically = true;
+    this.scale.forceOrientation(true, false);
+    //this.scale.hasResized.add(this.gameResized, this);
+    //this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
+    //this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
+    //this.scale.setScreenSize(true);
+    this.scale.startFullScreen(false);
 }
 
 function createAliens (alientype) {    
