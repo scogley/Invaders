@@ -4,7 +4,7 @@ var game = new Phaser.Game(640, 960, Phaser.AUTO, 'myInvaders', { preload: prelo
 function preload() {
 
     //game.load.image('bullet', 'assets/banana.png');
-    game.load.image('bullet', 'assets/bullet.png');
+    game.load.image('bullet', 'assets/bullet2.png');
     game.load.image('enemyBullet', 'assets/enemy-bullet.png');
     game.load.spritesheet('invader3', 'assets/invader32x32x4.png', 32, 32);
     game.load.image('invader2', 'assets/greenInvader.png', 16, 16);
