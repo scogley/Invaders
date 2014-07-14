@@ -144,10 +144,13 @@ function createAliens (alientype) {
         {
             // var alien = aliens.create(x * 48, y * 50, 'invader');
             var alien = aliens.create(x * 48, y * 50, alientype);
-            alien.anchor.setTo(0.5, 0.5);
-            alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-            alien.play('fly');
-            alien.body.moves = false;
+            if(alientype == 'invader3')
+            {
+                alien.anchor.setTo(0.5, 0.5);
+                alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+                alien.play('fly');
+                alien.body.moves = false;
+            }
         }
     }
 
