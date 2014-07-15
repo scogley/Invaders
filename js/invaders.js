@@ -76,7 +76,20 @@ function create() {
     aliens.enableBody = true;
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
 
+    // create randomized alien group
     createAliens(game.rnd.between(1,4));
+
+    // Using retrofont
+        // font = game.add.retroFont('knightHawks', 31, 25, Phaser.RetroFont.TEXT_SET6, 10, 1, 1);
+        // var c = 0;
+        // game.add.image(game.world.centerX, c, font);    
+
+        // for (var c = 0; c < 19; c++)
+        // {
+        //     var i = game.add.image(game.world.centerX, c * 32, font);
+        //     i.tint = Math.random() * 0xFFFFFF;
+        //     i.anchor.set(0.5, 1);
+        // }
 
     //  The score
     scoreString = 'Score : ';
@@ -90,18 +103,6 @@ function create() {
     // stateText = game.add.text(game.world.centerX,game.world.centerY,' ', { font: '84px Arial', fill: '#fff' });
     // stateText.anchor.setTo(0.5, 0.5);
     // stateText.visible = false;
-
-    // font = game.add.retroFont('knightHawks', 31, 25, Phaser.RetroFont.TEXT_SET6, 10, 1, 1);
-    // var c = 0;
-    // game.add.image(game.world.centerX, c, font);    
-
-
-    // for (var c = 0; c < 19; c++)
-    // {
-    //     var i = game.add.image(game.world.centerX, c * 32, font);
-    //     i.tint = Math.random() * 0xFFFFFF;
-    //     i.anchor.set(0.5, 1);
-    // }
 
 
     for (var i = 0; i < 3; i++) 
@@ -122,7 +123,7 @@ function create() {
     pointer1 = game.input.addPointer();    
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
-    // set full screen display. See fullscreen mobile example project for details
+    // Set full screen display. See fullscreen mobile example project for details
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     this.scale.minWidth = 480;
     this.scale.minHeight = 260;
@@ -135,7 +136,7 @@ function create() {
     //this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
     //this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
     
-    // set screen size automatically based on the scaleMode
+    // set screen size automatically based on the scaleMode. forces fullscreen (works!)
     this.scale.setScreenSize(true);
     
 }
@@ -218,6 +219,10 @@ function update() {
         player.body.y = game.input.pointer1.y;      
     }
 
+    if (game.input.pointer1.x - player.body.x > 100)
+    {
+        alert('you tried to move too many pixels!');
+    }
     //  Firing keyboard?
     if (fireButton.isDown)
     {
