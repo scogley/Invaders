@@ -1,0 +1,10 @@
+From the Frame Properties (...)
+Transparency box is checked
+eyedropper select the background
+
+File>properties
+background color
+eyedropper select the background
+
+
+
