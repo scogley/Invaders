@@ -9,7 +9,7 @@ function preload() {
     game.load.image('invader1', 'assets/invader_bee.png', 30, 30);
     game.load.image('invader2', 'assets/greenInvader.png', 16, 16);
     game.load.spritesheet('invader3', 'assets/invader32x32x4.png', 32, 32);
-    game.load.image('invader4', 'assets/smiley.png', 16, 16);
+    game.load.image('invader4', 'assets/smiley2.png', 32, 32);
     game.load.image('ship', 'assets/player.png');
     game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
     game.load.image('starfield', 'assets/starfield2.png');   
@@ -91,9 +91,9 @@ function create() {
     // stateText.anchor.setTo(0.5, 0.5);
     // stateText.visible = false;
 
-    font = game.add.retroFont('knightHawks', 31, 25, Phaser.RetroFont.TEXT_SET6, 10, 1, 1);
-    var c = 0;
-    game.add.image(game.world.centerX, c, font);    
+    // font = game.add.retroFont('knightHawks', 31, 25, Phaser.RetroFont.TEXT_SET6, 10, 1, 1);
+    // var c = 0;
+    // game.add.image(game.world.centerX, c, font);    
 
 
     // for (var c = 0; c < 19; c++)
@@ -134,8 +134,10 @@ function create() {
     //this.scale.hasResized.add(this.gameResized, this);
     //this.scale.enterIncorrectOrientation.add(this.enterIncorrectOrientation, this);
     //this.scale.leaveIncorrectOrientation.add(this.leaveIncorrectOrientation, this);
-    //this.scale.setScreenSize(true);
-    this.scale.startFullScreen(false);
+    
+    // set screen size automatically based on the scaleMode
+    this.scale.setScreenSize(true);
+    
 }
 
 function createAliens (alientype) {    
@@ -296,7 +298,7 @@ function enemyHitsPlayer (player,bullet) {
         enemyBullets.callAll('kill');
         gameisrunning = 0;
 
-        font.text = 'GAME OVER'
+        //font.text = 'GAME OVER'
 
         //stateText.text=" GAME OVER \n Click to restart";
         //stateText.visible = true;
@@ -349,7 +351,7 @@ function fireBullet () {
         {
             //  And fire it
             bullet.reset(player.x, player.y - 20);
-            bullet.body.velocity.y = -400;
+            bullet.body.velocity.y = -700;
             bulletTime = game.time.now + 200;
         }
     }
@@ -367,14 +369,10 @@ function loadNextWave () {
 
     //  And brings the aliens back from the dead :)    
     waveCount ++;
-    font.text = 'Incoming Wave' + waveCount;
-    //stateText.text = " Incoming Wave " + waveCount;
-    //stateText.visible = true;  
-
-    // set a timer to spawn the next wave of baddies.
-    // hide the text
+    //font.text = 'Incoming Wave' + waveCount;
+    
     // randomize the enemy type
-    game.time.events.add(Phaser.Timer.SECOND * 4, function(){font.text = '';aliens.removeAll(); createAliens(game.rnd.between(1,4));})    
+    game.time.events.add(Phaser.Timer.SECOND * 4, function(){aliens.removeAll(); createAliens(game.rnd.between(1,4));})    
     
 }
 
@@ -382,7 +380,7 @@ function restart () {
     // set boolean game is running to true
     gameisrunning = 1;
     // hide the game over font text
-    font.text = '';    
+    //font.text = '';    
     // reset the score
     score = 0;
     //resets the life count
