@@ -6,10 +6,10 @@ function preload() {
     //game.load.image('bullet', 'assets/banana.png');
     game.load.image('bullet', 'assets/bullet2.png');
     game.load.image('enemyBullet', 'assets/enemy-bullet.png');
-    game.load.spritesheet('invader3', 'assets/invader32x32x4.png', 32, 32);
-    game.load.image('invader2', 'assets/greenInvader.png', 16, 16);
-    //game.load.image('invader1', 'assets/smiley.png', 16, 16);
     game.load.image('invader1', 'assets/invader_bee.png', 30, 30);
+    game.load.image('invader2', 'assets/greenInvader.png', 16, 16);
+    game.load.spritesheet('invader3', 'assets/invader32x32x4.png', 32, 32);
+    game.load.image('invader4', 'assets/smiley.png', 16, 16);
     game.load.image('ship', 'assets/player.png');
     game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
     game.load.image('starfield', 'assets/starfield2.png');   
@@ -76,7 +76,7 @@ function create() {
     aliens.enableBody = true;
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
 
-    createAliens('invader1');
+    createAliens(game.rnd.between(1,4));
 
     //  The score
     scoreString = 'Score : ';
@@ -143,9 +143,9 @@ function createAliens (alientype) {
     {
         for (var x = 0; x < 10; x++)
         {
-            // var alien = aliens.create(x * 48, y * 50, 'invader');
-            var alien = aliens.create(x * 48, y * 50, alientype);
-            if(alientype == 'invader3')
+            var alienName = 'invader' + alientype;            
+            var alien = aliens.create(x * 48, y * 50, alienName);
+            if(alientype == 3)
             {
                 alien.anchor.setTo(0.5, 0.5);
                 alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
@@ -370,9 +370,11 @@ function loadNextWave () {
     font.text = 'Incoming Wave' + waveCount;
     //stateText.text = " Incoming Wave " + waveCount;
     //stateText.visible = true;  
-    var invaderName = 'invader' + waveCount;
-    // set a timer to spawn the next wave of baddies and hide the text
-    game.time.events.add(Phaser.Timer.SECOND * 4, function(){font.text = '';aliens.removeAll(); createAliens(invaderName);})    
+
+    // set a timer to spawn the next wave of baddies.
+    // hide the text
+    // randomize the enemy type
+    game.time.events.add(Phaser.Timer.SECOND * 4, function(){font.text = '';aliens.removeAll(); createAliens(game.rnd.between(1,4));})    
     
 }
 
@@ -390,7 +392,7 @@ function restart () {
     // remove all the alien bullets
     enemyBullets.callAll('kill');    
     // spawn the first wave of aliens    
-    createAliens('invader1');
+    createAliens(game.rnd.between(1,4));
     //revives the player
     player.revive();
     // reset starting position
