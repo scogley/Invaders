@@ -221,7 +221,7 @@ function update() {
 
     if (game.input.pointer1.x - player.body.x > 100)
     {
-        alert('you tried to move too many pixels!');
+        console.log('foo');
     }
     //  Firing keyboard?
     if (fireButton.isDown)
