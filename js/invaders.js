@@ -67,9 +67,13 @@ function create() {
     enemyBullets.setAll('checkWorldBounds', true);
 
     //  The hero!
-    player = game.add.sprite(400, 500, 'ship');
+    player = game.add.sprite(320, 800, 'ship');    
     player.anchor.setTo(0.5, 0.5);
+    // disable texture smoothing to make pixel art stand out
+    player.smoothed = false;
     game.physics.enable(player, Phaser.Physics.ARCADE);
+
+
 
     //  The baddies!
     aliens = game.add.group();
@@ -295,6 +299,8 @@ function enemyHitsPlayer (player,bullet) {
     var explosion = explosions.getFirstExists(false);
     explosion.reset(player.body.x, player.body.y);
     explosion.play('kaboom', 30, false, true);
+    player.body.x = 320;
+    player.body.y = 800;    
 
     // When the player dies
     if (lives.countLiving() < 1)
