@@ -189,7 +189,7 @@ function update() {
         fireBullet();
     }
     //  Scroll the background
-    starfield.tilePosition.y += 2;
+    starfield.tilePosition.y += 3;
 
     //  Reset the player, then check for movement keys
     player.body.velocity.setTo(0, 0);
