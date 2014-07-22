@@ -295,12 +295,11 @@ function enemyHitsPlayer (player,bullet) {
         live.kill();
     }
 
+
     //  And create an explosion :)
     var explosion = explosions.getFirstExists(false);
     explosion.reset(player.body.x, player.body.y);
-    explosion.play('kaboom', 30, false, true);
-    player.body.x = 320;
-    player.body.y = 800;    
+    explosion.play('kaboom', 30, false, true);               
 
     // When the player dies
     if (lives.countLiving() < 1)
@@ -316,6 +315,14 @@ function enemyHitsPlayer (player,bullet) {
 
         //the "click to restart" handler
         game.input.onTap.addOnce(restart,this);        
+    }
+    else
+    {
+        player.alpha = 0.4;
+        game.time.events.add(Phaser.Timer.SECOND * 3, function(){player.alpha = 1.0;})    
+        player.body.x = 320;
+        player.body.y = 800; 
+
     }
 
 }
