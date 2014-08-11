@@ -222,7 +222,7 @@ function update() {
     if (game.input.pointer1.isDown)
     {
         player.body.x =  game.input.pointer1.x;  
-        player.body.y = game.input.pointer1.y;      
+        player.body.y = game.input.pointer1.y + 75;      
     }
 
     if (game.input.pointer1.x - player.body.x > 100)
