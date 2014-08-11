@@ -288,7 +288,7 @@ function collisionHandler (bullet, alien) {
 
 function enemyHitsPlayer (player,bullet) {
     
-    if (player.invincible = false)
+    if (player.invincible == false)
     {
 	    bullet.kill();
 
