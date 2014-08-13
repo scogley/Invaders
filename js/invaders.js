@@ -105,6 +105,10 @@ function create() {
     lives = game.add.group();
     game.add.text(game.world.width - 100, 10, 'Lives : ', { font: '34px Arial', fill: '#fff' });
 
+    // Show FPS
+    game.time.advancedTiming = true;
+    fpsText = game.add.text(20, 20, '', { font: '16px Arial', fill: '#ffffff' });
+
     //  Text
     // stateText = game.add.text(game.world.centerX,game.world.centerY,' ', { font: '84px Arial', fill: '#fff' });
     // stateText.anchor.setTo(0.5, 0.5);
@@ -189,6 +193,11 @@ function descend() {
 }
 
 function update() {
+
+    // update the fps counter
+    if(this.game.time.fps !== 0){
+    	this.fpsText.setText(this.game.time.fps + ' FPS');
+    }
 
     // continously fire weapon
     if (gameisrunning == 1){
