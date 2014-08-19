@@ -322,13 +322,16 @@ function enemyHitsPlayer (player,bullet) {
 	    }
 	    else
 	    {
-	        // set the player to slightly transparent
-	        player.alpha = 0.4;
 	        // player is invincible
-	        player.invincible = true;
-	        game.time.events.add(Phaser.Timer.SECOND * 3, function(){player.alpha = 1.0; player.invincible = false;})          
-	        player.body.x = 320;
-	        player.body.y = 800; 
+            player.invincible = true;
+            // player ship transparent
+            player.alpha = 0.0;
+            // player ship to slightly transparent after 2 seconds
+            game.time.events.add(Phaser.Timer.SECOND * 2, function(){player.alpha = 0.4;})            
+	        // player ship solid and no longer invincible after 5 seconds
+	        game.time.events.add(Phaser.Timer.SECOND * 5, function(){player.alpha = 1.0; player.invincible = false;player.body.x = 320;player.body.y = 800;})          
+	        
+	        
 
 	    }
 	}
