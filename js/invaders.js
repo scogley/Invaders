@@ -81,6 +81,8 @@ function create() {
     aliens = game.add.group();
     aliens.enableBody = true;
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
+    aliens.setAll('outOfBoundsKill', true);
+    aliens.setAll('checkWorldBounds', true);
 
     // create randomized alien group
     createAliens(game.rnd.between(1,4));
