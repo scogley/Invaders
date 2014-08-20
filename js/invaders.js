@@ -71,6 +71,8 @@ function create() {
     player.anchor.setTo(0.5, 0.5);
     // disable texture smoothing to make pixel art stand out
     player.smoothed = false;
+    // set the custom invincible property to false by default. Used when respawning for temporary invinciblity.
+    player.invincible = false;
     game.physics.enable(player, Phaser.Physics.ARCADE);
 
 
@@ -220,7 +222,7 @@ function update() {
     if (game.input.pointer1.isDown)
     {
         player.body.x =  game.input.pointer1.x;  
-        player.body.y = game.input.pointer1.y;      
+        player.body.y = game.input.pointer1.y - 100;      
     }
 
     if (game.input.pointer1.x - player.body.x > 100)
@@ -238,7 +240,7 @@ function update() {
         enemyFires();
     }
 
-    //  Run collision
+    //  Run collision detection
     game.physics.arcade.overlap(bullets, aliens, collisionHandler, null, this);
     game.physics.arcade.overlap(enemyBullets, player, enemyHitsPlayer, null, this);
 
@@ -286,65 +288,56 @@ function collisionHandler (bullet, alien) {
 
 function enemyHitsPlayer (player,bullet) {
     
-    bullet.kill();
-
-    live = lives.getFirstAlive();
-
-    if (live)
+    if (player.invincible == false)
     {
-        live.kill();
-    }
+        bullet.kill();
 
+        live = lives.getFirstAlive();
 
-    //  And create an explosion :)
-    var explosion = explosions.getFirstExists(false);
-    explosion.reset(player.body.x, player.body.y);
-    explosion.play('kaboom', 30, false, true);               
-
-    // When the player dies
-    if (lives.countLiving() < 1)
-    {
-        player.kill();
-        enemyBullets.callAll('kill');
-        gameisrunning = 0;
-
-        //font.text = 'GAME OVER'
-
-        //stateText.text=" GAME OVER \n Click to restart";
-        //stateText.visible = true;
-
-        //the "click to restart" handler
-        game.input.onTap.addOnce(restart,this);        
-    }
-    else
-    {
-        
-        for (var c = 2; c < 12; c++)
+        if (live)
         {
-            //convert c into smaller number for seconds
-            var time1 = c * 0.5;
-            game.time.events.add(Phaser.Timer.SECOND * time1, function(){player.alpha = 1.0;})    
+            live.kill();
         }
 
-        for (var c = 1; c < 12; c++)
+
+        //  And create an explosion :)
+        var explosion = explosions.getFirstExists(false);
+        explosion.reset(player.body.x, player.body.y);
+        explosion.play('kaboom', 30, false, true);               
+
+        // When the player dies
+        if (lives.countLiving() < 1)
         {
-            //convert c into smaller number for seconds
-            var time2 = c * 0.5;
-            game.time.events.add(Phaser.Timer.SECOND * time2, function(){player.alpha = 0.4;})    
+            player.kill();
+            enemyBullets.callAll('kill');
+            gameisrunning = 0;
+
+            //font.text = 'GAME OVER'
+
+            //stateText.text=" GAME OVER \n Click to restart";
+            //stateText.visible = true;
+
+            //the "click to restart" handler
+            game.input.onTap.addOnce(restart,this);        
         }
+        else
+        {
+            // player is invincible
+            player.invincible = true;
+            // player ship transparent
+            player.alpha = 0.0;
+            // player ship to slightly transparent after 2 seconds
+            game.time.events.add(Phaser.Timer.SECOND * 2, function(){player.alpha = 0.4;})            
+            // player ship solid and no longer invincible after 5 seconds
+            game.time.events.add(Phaser.Timer.SECOND * 5, function(){player.alpha = 1.0; player.invincible = false;player.body.x = 320;player.body.y = 800;})          
+            
+            
 
-        player.alpha = 1.0;
-        // game.time.events.add(Phaser.Timer.SECOND * 0.5, function(){player.alpha = 1.0;})    
-        // game.time.events.add(Phaser.Timer.SECOND * 1, function(){player.alpha = 0.4;})    
-        // game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){player.alpha = 1.0;})    
-        // game.time.events.add(Phaser.Timer.SECOND * 2, function(){player.alpha = 0.4;})    
-        // game.time.events.add(Phaser.Timer.SECOND * 2.5, function(){player.alpha = 1.0;}) 
-        player.body.x = 320;
-        player.body.y = 800; 
-
+        }
     }
-
 }
+
+
 
 function enemyFires () {
 
