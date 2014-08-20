@@ -318,8 +318,27 @@ function enemyHitsPlayer (player,bullet) {
     }
     else
     {
-        player.alpha = 0.4;
-        game.time.events.add(Phaser.Timer.SECOND * 3, function(){player.alpha = 1.0;})    
+        
+        for (var c = 2; c < 12; c++)
+        {
+            //convert c into smaller number for seconds
+            var time1 = c * 0.5;
+            game.time.events.add(Phaser.Timer.SECOND * time1, function(){player.alpha = 1.0;})    
+        }
+
+        for (var c = 1; c < 12; c++)
+        {
+            //convert c into smaller number for seconds
+            var time2 = c * 0.5;
+            game.time.events.add(Phaser.Timer.SECOND * time2, function(){player.alpha = 0.4;})    
+        }
+
+        player.alpha = 1.0;
+        // game.time.events.add(Phaser.Timer.SECOND * 0.5, function(){player.alpha = 1.0;})    
+        // game.time.events.add(Phaser.Timer.SECOND * 1, function(){player.alpha = 0.4;})    
+        // game.time.events.add(Phaser.Timer.SECOND * 1.5, function(){player.alpha = 1.0;})    
+        // game.time.events.add(Phaser.Timer.SECOND * 2, function(){player.alpha = 0.4;})    
+        // game.time.events.add(Phaser.Timer.SECOND * 2.5, function(){player.alpha = 1.0;}) 
         player.body.x = 320;
         player.body.y = 800; 
 
