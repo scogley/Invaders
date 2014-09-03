@@ -1,2 +1,0 @@
-practicing adding things to git via cmd prompt
-foo changes
