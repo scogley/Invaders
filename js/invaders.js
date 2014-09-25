@@ -7,9 +7,10 @@ function preload() {
     game.load.image('bullet', 'assets/bullet2.png');
     game.load.image('enemyBullet', 'assets/enemy-bullet.png');
     game.load.image('invader1', 'assets/invader_bee.png', 30, 30);
-    game.load.image('invader2', 'assets/greenInvader.png', 16, 16);
+    game.load.image('invader2', 'assets/greenInvader.png', 16, 16);    
     game.load.spritesheet('invader3', 'assets/invader32x32x4.png', 32, 32);
     game.load.image('invader4', 'assets/smiley2.png', 32, 32);
+    game.load.image('invader9', 'assets/evilKitty.png', 400, 320);
     game.load.image('ship', 'assets/player.png');
     game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
     game.load.image('starfield', 'assets/starfield2.png');   
@@ -38,6 +39,7 @@ var livingEnemies = [];
 var waveCount = 1;
 var gameisrunning = 1;
 var font;
+var enemyhealth = 100;
 
 function create() {
 
@@ -83,24 +85,36 @@ function create() {
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
 
     // create randomized alien group
-    createAliens(game.rnd.between(1,4));
+    //createAliens(game.rnd.between(1,4));
+    createAliens(9);
 
-    // Using retrofont
-        // font = game.add.retroFont('knightHawks', 31, 25, Phaser.RetroFont.TEXT_SET6, 10, 1, 1);
-        // var c = 0;
-        // game.add.image(game.world.centerX, c, font);    
+    
+  /*  // Bosses    
+    bosses = game.add.group();
+    bosses.enableBody = true;
+    bosses.physicsBodyType = Phaser.Physics.ARCADE;
 
-        // for (var c = 0; c < 19; c++)
-        // {
-        //     var i = game.add.image(game.world.centerX, c * 32, font);
-        //     i.tint = Math.random() * 0xFFFFFF;
-        //     i.anchor.set(0.5, 1);
-        // }
+    createBoss(1);*/
+
+    //Using retrofont
+     /*   font = game.add.retroFont('knightHawks', 31, 25, Phaser.RetroFont.TEXT_SET6, 10, 1, 1);
+        var c = 0;
+        game.add.image(game.world.centerX, c, font);    
+
+        for (var c = 0; c < 19; c++)
+        {
+            var i = game.add.image(game.world.centerX, c * 32, font);
+            i.tint = Math.random() * 0xFFFFFF;
+            i.anchor.set(0.5, 1);
+        }*/
+
+    
+
 
     //  The score
     scoreString = 'Score : ';
     scoreText = game.add.text(10, 10, scoreString + score, { font: '34px Arial', fill: '#fff' });
-
+    
     //  Lives
     lives = game.add.group();
     game.add.text(game.world.width - 100, 10, 'Lives : ', { font: '34px Arial', fill: '#fff' });
@@ -148,18 +162,27 @@ function create() {
 }
 
 function createAliens (alientype) {    
-    for (var y = 0; y < 4; y++)
+    if (alientype == 9)
     {
-        for (var x = 0; x < 10; x++)
+        var alienName = 'invader' + alientype;
+        var alien = aliens.create(48, 50, alienName); 
+
+    }
+    else
+    {
+        for (var y = 0; y < 4; y++)
         {
-            var alienName = 'invader' + alientype;            
-            var alien = aliens.create(x * 48, y * 50, alienName);
-            if(alientype == 3)
+            for (var x = 0; x < 10; x++)
             {
-                alien.anchor.setTo(0.5, 0.5);
-                alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-                alien.play('fly');
-                alien.body.moves = false;
+                var alienName = 'invader' + alientype;            
+                var alien = aliens.create(x * 48, y * 50, alienName);            
+                if(alientype == 3)
+                {
+                    alien.anchor.setTo(0.5, 0.5);
+                    alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+                    alien.play('fly');
+                    alien.body.moves = false;
+                }            
             }
         }
     }
@@ -169,10 +192,22 @@ function createAliens (alientype) {
 
     //  All this does is basically start the invaders moving. Notice we're moving the Group they belong to, rather than the invaders directly.    
     var tween = game.add.tween(aliens).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-
+    
     //  When the tween loops it calls descend
     tween.onLoop.add(descend, this);
 }
+
+/*function createBosses (bosstype) {    
+
+    var bossName = 'boss' + alientype;
+    var boss = bosses.create(48, 50, alienName); 
+    
+    bosses.x = 5;
+    bosses.y = 50;
+
+    //  All this does is basically start the invaders moving. Notice we're moving the Group they belong to, rather than the invaders directly.    
+    var tween = game.add.tween(aliens).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+}*/
 
 function setupInvader (invader) {
 
@@ -241,8 +276,9 @@ function update() {
     }
 
     //  Run collision detection
-    game.physics.arcade.overlap(bullets, aliens, collisionHandler, null, this);
-    game.physics.arcade.overlap(enemyBullets, player, enemyHitsPlayer, null, this);
+    game.physics.arcade.overlap(bullets, aliens, playerBulletHitsEnemy, null, this);    
+    game.physics.arcade.overlap(player, enemyBullets, enemyBulletHitsPlayer, null, this); 
+    game.physics.arcade.overlap(player, aliens, enemyBulletHitsPlayer, null, this);   
 
 }
 
@@ -255,10 +291,10 @@ function render() {
 
 }
 
-function collisionHandler (bullet, alien) {
+function playerBulletHitsEnemy (bullet, alien) {
 
     //  When a bullet hits an alien we kill them both
-    bullet.kill();
+    bullet.kill();        
     alien.kill();
 
     //  Increase the score
@@ -286,8 +322,9 @@ function collisionHandler (bullet, alien) {
 
 }
 
-function enemyHitsPlayer (player,bullet) {
-    
+function enemyBulletHitsPlayer (player,bullet) {
+
+    // if enemy bullet or ship collides with the player we kill the player
     if (player.invincible == false)
     {
         bullet.kill();
@@ -408,6 +445,7 @@ function loadNextWave () {
     
     // randomize the enemy type
     game.time.events.add(Phaser.Timer.SECOND * 4, function(){aliens.removeAll(); createAliens(game.rnd.between(1,4));})    
+    
     
 }
 
