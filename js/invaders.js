@@ -10,7 +10,7 @@ function preload() {
     game.load.image('invader2', 'assets/greenInvader.png', 16, 16);    
     game.load.spritesheet('invader3', 'assets/invader32x32x4.png', 32, 32);
     game.load.image('invader4', 'assets/smiley2.png', 32, 32);
-    game.load.image('invader9', 'assets/evilKitty1.png', 400, 320);
+    game.load.image('invader5', 'assets/evilKitty1.png', 400, 320);
     game.load.image('ship', 'assets/player.png');
     game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
     game.load.image('starfield', 'assets/starfield2.png');   
@@ -39,7 +39,6 @@ var livingEnemies = [];
 var waveCount = 1;
 var gameisrunning = 1;
 var font;
-var enemyhealth = 100;
 
 function create() {
 
@@ -83,34 +82,11 @@ function create() {
     aliens = game.add.group();
     aliens.enableBody = true;
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
+    aliens.isBoss = false;
 
     // create randomized alien group
-    //createAliens(game.rnd.between(1,4));
-    createAliens(9);
-
-    
-  /*  // Bosses    
-    bosses = game.add.group();
-    bosses.enableBody = true;
-    bosses.physicsBodyType = Phaser.Physics.ARCADE;
-
-    createBoss(1);*/
-
-    //Using retrofont
-     /*   font = game.add.retroFont('knightHawks', 31, 25, Phaser.RetroFont.TEXT_SET6, 10, 1, 1);
-        var c = 0;
-        game.add.image(game.world.centerX, c, font);    
-
-        for (var c = 0; c < 19; c++)
-        {
-            var i = game.add.image(game.world.centerX, c * 32, font);
-            i.tint = Math.random() * 0xFFFFFF;
-            i.anchor.set(0.5, 1);
-        }*/
-
-    
-
-
+    createAliens(game.rnd.between(1,5));
+  
     //  The score
     scoreString = 'Score : ';
     scoreText = game.add.text(10, 10, scoreString + score, { font: '34px Arial', fill: '#fff' });
@@ -162,11 +138,12 @@ function create() {
 }
 
 function createAliens (alientype) {    
-    if (alientype == 9)
+    // alientype 5 is a boss
+    if (alientype == 5)
     {
-        var alienName = 'invader' + alientype;
+        var alienName = 'invader' + alientype;        
         var alien = aliens.create(48, 50, alienName); 
-
+        alien.isBoss = true;
     }
     else
     {
@@ -194,7 +171,7 @@ function createAliens (alientype) {
     var tween = game.add.tween(aliens).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
     
     //  When the tween loops it calls descend
-    tween.onLoop.add(descend, this);
+    tween.onLoop.add(descend, this);    
 }
 
 /*function createBosses (bosstype) {    
@@ -293,9 +270,19 @@ function render() {
 
 function playerBulletHitsEnemy (bullet, alien) {
 
-    //  When a bullet hits an alien we kill them both
-    bullet.kill();        
-    alien.kill();
+    // check if enemy is a boss
+    if(alien.isBoss == true)
+    {
+        // TODO: replace hard coded value with property from player bullet
+        alien.damage(0.05);
+        bullet.kill();                
+    }
+    //  When a bullet hits a regular alien kill bullet and alien immediately
+    else
+    {
+        bullet.kill();        
+        alien.kill();
+    }
 
     //  Increase the score
     score += 20;
@@ -441,10 +428,9 @@ function loadNextWave () {
 
     //  And brings the aliens back from the dead :)    
     waveCount ++;
-    //font.text = 'Incoming Wave' + waveCount;
-    
+
     // randomize the enemy type
-    game.time.events.add(Phaser.Timer.SECOND * 4, function(){aliens.removeAll(); createAliens(game.rnd.between(1,4));})    
+    game.time.events.add(Phaser.Timer.SECOND * 4, function(){aliens.removeAll(); createAliens(game.rnd.between(1,5));})    
     
     
 }
@@ -459,11 +445,12 @@ function restart () {
     //resets the life count
     lives.callAll('revive');
     //  And brings the aliens back from the dead :)
-    aliens.removeAll();
+    //aliens.removeAll();    
+    aliens.callAll('kill');
     // remove all the alien bullets
     enemyBullets.callAll('kill');    
     // spawn the first wave of aliens    
-    createAliens(game.rnd.between(1,4));
+    createAliens(game.rnd.between(1,5));
     //revives the player
     player.revive();
     // reset starting position
