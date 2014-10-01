@@ -10,7 +10,8 @@ function preload() {
     game.load.image('invader2', 'assets/greenInvader.png', 16, 16);    
     game.load.spritesheet('invader3', 'assets/invader32x32x4.png', 32, 32);
     game.load.image('invader4', 'assets/smiley2.png', 32, 32);
-    game.load.image('invader5', 'assets/evilKitty1.png', 400, 320);
+    //game.load.image('invader5', 'assets/evilKitty1.png', 400, 320);
+    game.load.spritesheet('invader5', 'assets/anim_evilKitty.png', 400, 320);
     game.load.image('ship', 'assets/player.png');
     game.load.spritesheet('kaboom', 'assets/explode.png', 128, 128);
     game.load.image('starfield', 'assets/starfield2.png');   
@@ -142,8 +143,12 @@ function createAliens (alientype) {
     if (alientype == 5)
     {
         var alienName = 'invader' + alientype;        
-        var alien = aliens.create(48, 50, alienName); 
+        var alien = aliens.create(180, 50, alienName); 
         alien.isBoss = true;
+        alien.anchor.setTo(0.5, 0.5);
+        alien.animations.add('kittyAnim', [ 0, 1, 2, 3 ], 3, true);
+        alien.play('kittyAnim');
+        alien.body.moves = false;
     }
     else
     {
@@ -452,7 +457,9 @@ function restart () {
     // spawn the first wave of aliens    
     createAliens(game.rnd.between(1,5));
     //revives the player
-    player.revive();
+    //player.revive();
+
+    player.reset(320, 800, 1);
     // reset starting position
     // player.body.x = 400;
     // player.body.y = 500;
