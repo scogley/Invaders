@@ -1,5 +1,5 @@
 //invader foo
-var game = new Phaser.Game(640, 960, Phaser.CANVAS, 'myInvaders', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(640, 960, Phaser.AUTO, 'myInvaders', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
 
