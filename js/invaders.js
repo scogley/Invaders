@@ -1,5 +1,5 @@
 //invader foo
-var game = new Phaser.Game(640, 960, Phaser.CANVAS, 'myInvaders', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(638, 960, Phaser.CANVAS, 'myInvaders', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
 
@@ -244,7 +244,8 @@ function update() {
 
     if (game.input.pointer1.x - player.body.x > 100)
     {
-        console.log('foo');
+        //TODO: add logic to prevent touch input from teleporting the player ship everywhere. needs to move to the desired coordinates
+        //console.log('foo');        
     }
     //  Firing keyboard?
     if (fireButton.isDown)
