@@ -1,13 +1,13 @@
 #header {
-    background-color:black;
-    color:white;
+    background-color:white;
+    color:black;
     text-align:center;
     padding:5px;
 }
 
 #nav {
     line-height:30px;
-    background-color:#eeeeee;
+    background-color:black;
     height:300px;
     width:100px;
     float:left;
@@ -26,6 +26,13 @@
     padding:5px; 
 }
 
+#aside {
+    background-color: white;
+    width:150px;
+    float:right;
+    padding:10px;         
+}
+
 table.bugsandfeatures {
     width:80%;
     border:2px solid #d4d4d4;
@@ -35,5 +42,5 @@ table.bugsandfeatures th, td {
     padding:1px;
 }
 table.bugsandfeatures td {
-    width:100%;    
+    width:100%;        
 }
