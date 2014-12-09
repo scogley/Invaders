@@ -25,3 +25,15 @@
     text-align:center;
     padding:5px; 
 }
+
+table.bugsandfeatures {
+    width:80%;
+    border:2px solid #d4d4d4;
+}
+table.bugsandfeatures th, td {
+    text-align: left;
+    padding:1px;
+}
+table.bugsandfeatures td {
+    width:100%;    
+}
