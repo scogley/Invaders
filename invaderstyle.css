@@ -7,39 +7,43 @@
 
 #nav {
     line-height:30px;
-    background-color:black;
+    background-color:white;
     height:300px;
     width:100px;
     float:left;
     padding:5px; 
 }
 #section {
+    background-color: white;
     width:350px;
     float:left;
     padding:10px; 
 }
 #footer {
-    background-color:black;
-    color:white;
+    background-color:white;
+    color:black;
     clear:both;
     text-align:center;
     padding:5px; 
 }
 
-#aside {
-    background-color: white;
-    width:150px;
-    float:right;
+#bugsandfeatures {
+    color: black;
+    background-color: white;    
+    width: auto;
+    float:left;
     padding:10px;         
 }
 
-table.bugsandfeatures {
+table.bugsandfeatures {    
     width:80%;
-    border:2px solid #d4d4d4;
+    border:3px solid grey;
+    background-color: white;
 }
 table.bugsandfeatures th, td {
     text-align: left;
-    padding:1px;
+    padding:2px;
+    border:1px solid grey;
 }
 table.bugsandfeatures td {
     width:100%;        
