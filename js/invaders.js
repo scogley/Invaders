@@ -84,6 +84,9 @@ function create() {
     aliens.enableBody = true;
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
     aliens.isBoss = false;
+    // fix bug where enemy bullets keep firing from bottom of screen
+    aliens.setAll('outOfBoundsKill', true);
+    aliens.setAll('checkWorldBounds', true);
 
     // create randomized alien group
     createAliens(game.rnd.between(1,5));
@@ -157,7 +160,9 @@ function createAliens (alientype) {
             for (var x = 0; x < 10; x++)
             {
                 var alienName = 'invader' + alientype;            
-                var alien = aliens.create(x * 48, y * 50, alienName);            
+                var alien = aliens.create(x * 48, y * 50, alienName); 
+                alien.outOfBoundsKill = true;
+                alien.checkWorldBounds = true;
                 if(alientype == 3)
                 {
                     alien.anchor.setTo(0.5, 0.5);
@@ -262,6 +267,7 @@ function update() {
     game.physics.arcade.overlap(bullets, aliens, playerBulletHitsEnemy, null, this);    
     game.physics.arcade.overlap(player, enemyBullets, enemyBulletHitsPlayer, null, this); 
     game.physics.arcade.overlap(player, aliens, enemyBulletHitsPlayer, null, this);   
+
 
 }
 
