@@ -13,12 +13,13 @@ git checkout <branch name>
 #commit changes to a branch
 git commit -m "descriptive changelog text here"
 
+#merge branch and force a commit with descriptive message
+git merge <branch name> --no-ff -m "descriptive changelog text here"
+
 #reset everything to a previous known good commit
 git reset --hard
 	OR
 git reset --hard <commit>
-
-
 
 To completely delete the local copy of master and get the remote version. Create a new branch,
 check it out, delete local copy of master, fetch remote version of master:
