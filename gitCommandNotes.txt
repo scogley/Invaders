@@ -1,0 +1,34 @@
+#download the latest version of the branch from remote repository
+git fetch origin master
+
+#add files to the working stage
+git add *
+
+#create a new branch
+git branch <branch name>
+
+#checkout a new branch
+git checkout <branch name>
+
+#commit changes to a branch
+git commit -m "descriptive changelog text here"
+
+#reset everything to a previous known good commit
+git reset --hard
+	OR
+git reset --hard <commit>
+
+
+
+To completely delete the local copy of master and get the remote version. Create a new branch,
+check it out, delete local copy of master, fetch remote version of master:
+
+git branch <new branch name>
+git checkout <new branch name>
+git branch -D master
+git fetch origin master
+
+
+
+
+
