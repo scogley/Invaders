@@ -3,7 +3,7 @@ var game = new Phaser.Game(638, 960, Phaser.CANVAS, 'myInvaders', { preload: pre
 
 function preload() {
 
-    //game.load.image('bullet', 'assets/banana.png');
+    game.load.image('pickup_banana', 'assets/banana.png');
     game.load.image('bullet', 'assets/bullet2.png');
     game.load.image('enemyBullet', 'assets/enemy-bullet.png');
     game.load.image('invader1', 'assets/invader_bee.png', 30, 30);
@@ -25,6 +25,7 @@ var player;
 var aliens;
 var bullets;
 var bulletTime = 0;
+var pickups;
 var cursors;
 var fireButton;
 var explosions;
@@ -68,6 +69,19 @@ function create() {
     enemyBullets.setAll('outOfBoundsKill', true);
     enemyBullets.setAll('checkWorldBounds', true);
 
+    // pickup items group
+    pickups = game.add.group();
+    pickups.enableBody = true;
+    pickups.physicsBodyType = Phaser.Physics.ARCADE;
+    pickups.createMultiple(1,'pickup_banana');
+    pickups.setAll('anchor.x', 0.5);
+    pickups.setAll('anchor.y', 1);
+    pickups.setAll('outOfBoundsKill', true);
+    pickups.setAll('checkWorldBounds', true);
+
+    // create randomized item pickup    
+    createPickups(game.rnd.between(1,3));
+
     //  The hero!
     player = game.add.sprite(320, 800, 'ship');    
     player.anchor.setTo(0.5, 0.5);
@@ -84,13 +98,13 @@ function create() {
     aliens.enableBody = true;
     aliens.physicsBodyType = Phaser.Physics.ARCADE;
     aliens.isBoss = false;
-    // fix bug where enemy bullets keep firing from bottom of screen
+    // not sure if this code does anything since I am setting these properties in createAliens function
     aliens.setAll('outOfBoundsKill', true);
     aliens.setAll('checkWorldBounds', true);
 
     // create randomized alien group
     createAliens(game.rnd.between(1,5));
-  
+
     //  The score
     scoreString = 'Score : ';
     scoreText = game.add.text(10, 10, scoreString + score, { font: '34px Arial', fill: '#fff' });
@@ -198,17 +212,17 @@ function createAliens (alientype) {
     tween.onLoop.add(descend, this);    
 }
 
-/*function createBosses (bosstype) {    
 
-    var bossName = 'boss' + alientype;
-    var boss = bosses.create(48, 50, alienName); 
-    
-    bosses.x = 5;
-    bosses.y = 50;
-
-    //  All this does is basically start the invaders moving. Notice we're moving the Group they belong to, rather than the invaders directly.    
-    var tween = game.add.tween(aliens).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
-}*/
+function createPickup (pickupType){
+    var pickupName = 'pickup' + pickupType;
+    var pickup = pickups.create(x * 48, y * 0, pickupName);
+    pickups.x = 25;
+    pickups.y = 175;
+    // start the pickup moving by moving the group.
+    var tween = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    // When the tween loops it calls descend
+    tween.onLoop.add(descend, this);
+}
 
 function setupInvader (invader) {
 
@@ -390,6 +404,11 @@ function enemyBulletHitsPlayer (player,bullet) {
 
         }
     }
+}
+
+function playerTouchesPickup (player) {
+
+
 }
 
 
