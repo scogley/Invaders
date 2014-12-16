@@ -206,10 +206,10 @@ function createAliens (alientype) {
     }
 
     //  All this does is basically start the invaders moving. Notice we're moving the Group they belong to, rather than the invaders directly.    
-    var tween = game.add.tween(aliens).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    var tweenAliens = game.add.tween(aliens).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
     
     //  When the tween loops it calls descend
-    tween.onLoop.add(descend(10), this);    
+    tweenAliens.onLoop.add(descend, this);       
 }
 
 
@@ -219,9 +219,9 @@ function createPickups (pickupType){
     pickups.x = 25;
     pickups.y = 175;
     // start the pickup moving by moving the group.
-    //var tween = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    var tweenPickups = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
     // When the tween loops it calls descend
-    //tween.onLoop.add(descend(), this);
+    tweenPickups.onLoop.add(descendFast, this);
 }
 
 function setupInvader (invader) {
@@ -235,6 +235,12 @@ function setupInvader (invader) {
 function descend() {
 
     aliens.y += 10;
+
+}
+
+function descendFast() {
+
+	pickups.y += 20;
 
 }
 
