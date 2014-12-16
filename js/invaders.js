@@ -141,41 +141,55 @@ function create() {
     
 }
 
-function createAliens (alientype) {    
-    // alientype 5 is a boss
-    if (alientype == 5)
+function createAliens (alientype) {        
+    
+    switch (alientype)
     {
-        var alienName = 'invader' + alientype;        
-        var alien = aliens.create(180, 50, alienName); 
-        alien.isBoss = true;
-        alien.anchor.setTo(0.5, 0.5);
-        alien.animations.add('kittyAnim', [ 0, 1, 2, 3 ], 3, true);
-        alien.play('kittyAnim');
-        alien.body.moves = false;
-    }
-    else
-    {
-        for (var y = 0; y < 4; y++)
-        {
-            for (var x = 0; x < 10; x++)
+
+        case 3: // alientype 3 is an animated Invader     
+            for (var y = 0; y < 4; y++)
             {
-                var alienName = 'invader' + alientype;            
-                var alien = aliens.create(x * 48, y * 50, alienName); 
-                alien.outOfBoundsKill = true;
-                alien.checkWorldBounds = true;
-                if(alientype == 3)
+                for (var x = 0; x < 10; x++)
                 {
+                    var alienName = 'invader' + alientype;            
+                    var alien = aliens.create(x * 48, y * 50, alienName); 
+                    alien.outOfBoundsKill = true;
+                    alien.checkWorldBounds = true;
                     alien.anchor.setTo(0.5, 0.5);
                     alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
                     alien.play('fly');
-                    alien.body.moves = false;
-                }            
+                    alien.body.moves = false;                    
+                }
             }
-        }
+            break;
+        
+        case 5: // alientype 5 is a boss        
+            var alienName = 'invader' + alientype;        
+            var alien = aliens.create(180, 50, alienName); 
+            alien.isBoss = true;
+            alien.anchor.setTo(0.5, 0.5);
+            alien.animations.add('kittyAnim', [ 0, 1, 2, 3 ], 3, true);
+            alien.play('kittyAnim');
+            alien.body.moves = false;
+            aliens.x = 5;
+            aliens.y = 50;                    
+            break;
+        
+        default: // alientype default is standard Invader
+            for (var y = 0; y < 4; y++)
+            {
+                for (var x = 0; x < 10; x++)
+                {
+                    var alienName = 'invader' + alientype;            
+                    var alien = aliens.create(x * 48, y * 50, alienName); 
+                    alien.outOfBoundsKill = true;
+                    alien.checkWorldBounds = true;
+                    aliens.x = 5;
+                    aliens.y = 50;                    
+                }
+            }
+
     }
-    
-    aliens.x = 5;
-    aliens.y = 50;
 
     //  All this does is basically start the invaders moving. Notice we're moving the Group they belong to, rather than the invaders directly.    
     var tween = game.add.tween(aliens).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
