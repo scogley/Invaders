@@ -3,7 +3,7 @@ var game = new Phaser.Game(638, 960, Phaser.CANVAS, 'myInvaders', { preload: pre
 
 function preload() {
 
-    game.load.image('pickup_banana', 'assets/banana.png');
+    game.load.image('pickup1', 'assets/banana.png');
     game.load.image('bullet', 'assets/bullet2.png');
     game.load.image('enemyBullet', 'assets/enemy-bullet.png');
     game.load.image('invader1', 'assets/invader_bee.png', 30, 30);
@@ -73,14 +73,14 @@ function create() {
     pickups = game.add.group();
     pickups.enableBody = true;
     pickups.physicsBodyType = Phaser.Physics.ARCADE;
-    pickups.createMultiple(1,'pickup_banana');
+    pickups.createMultiple(1,'pickup1');
     pickups.setAll('anchor.x', 0.5);
     pickups.setAll('anchor.y', 1);
     pickups.setAll('outOfBoundsKill', true);
     pickups.setAll('checkWorldBounds', true);
 
     // create randomized item pickup    
-    createPickups(game.rnd.between(1,3));
+    createPickups(1);
 
     //  The hero!
     player = game.add.sprite(320, 800, 'ship');    
@@ -206,22 +206,22 @@ function createAliens (alientype) {
     }
 
     //  All this does is basically start the invaders moving. Notice we're moving the Group they belong to, rather than the invaders directly.    
-    var tween = game.add.tween(aliens).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    var tweenAliens = game.add.tween(aliens).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
     
     //  When the tween loops it calls descend
-    tween.onLoop.add(descend, this);    
+    tweenAliens.onLoop.add(descend, this);       
 }
 
 
-function createPickup (pickupType){
+function createPickups (pickupType){
     var pickupName = 'pickup' + pickupType;
-    var pickup = pickups.create(x * 48, y * 0, pickupName);
+    var pickup = pickups.create(48, 0, pickupName);
     pickups.x = 25;
     pickups.y = 175;
     // start the pickup moving by moving the group.
-    var tween = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    var tweenPickups = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
     // When the tween loops it calls descend
-    tween.onLoop.add(descend, this);
+    tweenPickups.onLoop.add(descendFast, this);
 }
 
 function setupInvader (invader) {
@@ -235,6 +235,12 @@ function setupInvader (invader) {
 function descend() {
 
     aliens.y += 10;
+
+}
+
+function descendFast() {
+
+	pickups.y += 20;
 
 }
 
