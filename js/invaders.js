@@ -4,7 +4,8 @@ var game = new Phaser.Game(638, 960, Phaser.CANVAS, 'myInvaders', { preload: pre
 function preload() {
 
     game.load.image('pickup1', 'assets/banana.png');
-    game.load.image('bullet', 'assets/bullet2.png');
+    game.load.image('bullet1', 'assets/bullet.png');
+    game.load.image('bullet2', 'assets/bullet2.png');
     game.load.image('enemyBullet', 'assets/enemy-bullet.png');
     game.load.image('invader1', 'assets/invader_bee.png', 30, 30);
     game.load.image('invader2', 'assets/greenInvader.png', 16, 16);    
@@ -23,6 +24,7 @@ function preload() {
 
 var player;
 var aliens;
+var bulletType;
 var bullets;
 var bulletTime = 0;
 var pickups;
@@ -49,15 +51,16 @@ function create() {
     //  The scrolling starfield background
     starfield = game.add.tileSprite(0, 0, 640, 1920, 'starfield');
 
-    //  Our bullet group
+    //  Our bullet group. Set bulletType to 1 for default
+    bulletType = 1;
     bullets = game.add.group();
     bullets.enableBody = true;
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
-    bullets.createMultiple(30, 'bullet');
+    bullets.createMultiple(30, 'bullet1');
     bullets.setAll('anchor.x', 0.5);
     bullets.setAll('anchor.y', 1);
     bullets.setAll('outOfBoundsKill', true);
-    bullets.setAll('checkWorldBounds', true);
+    bullets.setAll('checkWorldBounds', true);    
 
     // The enemy's bullets
     enemyBullets = game.add.group();
@@ -79,7 +82,7 @@ function create() {
     pickups.setAll('outOfBoundsKill', true);
     pickups.setAll('checkWorldBounds', true);
 
-    // create randomized item pickup    
+    // create item pickup group
     createPickups(1);
 
     //  The hero!
@@ -219,7 +222,7 @@ function createPickups (pickupType){
     pickups.x = 25;
     pickups.y = 175;
     // start the pickup moving by moving the group.
-    var tweenPickups = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    var tweenPickups = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Quadratic.None, true, 0, 1000, true);    
     // When the tween loops it calls descend
     tweenPickups.onLoop.add(descendFast, this);
 }
@@ -301,7 +304,7 @@ function update() {
     game.physics.arcade.overlap(bullets, aliens, playerBulletHitsEnemy, null, this);    
     game.physics.arcade.overlap(player, enemyBullets, enemyBulletHitsPlayer, null, this); 
     game.physics.arcade.overlap(player, aliens, enemyBulletHitsPlayer, null, this);   
-
+    game.physics.arcade.overlap(player, pickups, playerTouchesPickup, null, this);
 
 }
 
@@ -355,12 +358,12 @@ function playerBulletHitsEnemy (bullet, alien) {
 
 }
 
-function enemyBulletHitsPlayer (player,bullet) {
+function enemyBulletHitsPlayer (player, enemyBullets) {
 
     // if enemy bullet or ship collides with the player we kill the player
     if (player.invincible == false)
     {
-        bullet.kill();
+        enemyBullets.kill();
 
         live = lives.getFirstAlive();
 
@@ -378,8 +381,7 @@ function enemyBulletHitsPlayer (player,bullet) {
         // When the player dies
         if (lives.countLiving() < 1)
         {
-            player.kill();
-            enemyBullets.callAll('kill');
+            player.kill();            
             gameisrunning = 0;
 
             //font.text = 'GAME OVER'
@@ -412,9 +414,11 @@ function enemyBulletHitsPlayer (player,bullet) {
     }
 }
 
-function playerTouchesPickup (player) {
+function playerTouchesPickup (player, pickups) {
 
-
+	console.log('you touched the pickup!');
+	// update the bulletType
+	bulletType = 2;	
 }
 
 
@@ -459,7 +463,23 @@ function fireBullet () {
 
         if (bullet)
         {
-            //  And fire it
+        	// check which type of bullet to fire
+        	switch (bulletType){
+        	case 1: // blue laser
+        		bullet.loadTexture('bullet1', 0, false);
+        		// TODO: set a property for bullet damage
+        		break;
+        	case 2: // red laser
+        		bullet.loadTexture('bullet2', 0, false);
+        		// TODO: set a property for bullet damage
+        		break;
+        	default: // blue laser
+        		bullet.loadTexture('bullet1', 0, false);
+        		// TODO: set a property for bullet damage
+        		break;
+        	}
+
+            //  fire the bullet
             bullet.reset(player.x, player.y - 20);
             bullet.body.velocity.y = -700;
             bulletTime = game.time.now + 200;
@@ -487,28 +507,19 @@ function loadNextWave () {
 }
 
 function restart () {
+    
     // set boolean game is running to true
     gameisrunning = 1;
-    // hide the game over font text
-    //font.text = '';    
     // reset the score
     score = 0;
     //resets the life count
     lives.callAll('revive');
-    //  And brings the aliens back from the dead :)
-    //aliens.removeAll();    
+    
     aliens.callAll('kill');
     // remove all the alien bullets
     enemyBullets.callAll('kill');    
     // spawn the first wave of aliens    
     createAliens(game.rnd.between(1,5));
     //revives the player
-    //player.revive();
-
-    player.reset(320, 800, 1);
-    // reset starting position
-    // player.body.x = 400;
-    // player.body.y = 500;
-    
-
+    player.reset(320, 800, 1);    
 }
