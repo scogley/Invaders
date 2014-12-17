@@ -219,10 +219,10 @@ function createAliens (alientype) {
 function createPickups (pickupType){
     var pickupName = 'pickup' + pickupType;
     var pickup = pickups.create(48, 0, pickupName);
-    pickups.x = 25;
-    pickups.y = 175;
+    pickups.x = 120;
+    pickups.y = 375;
     // start the pickup moving by moving the group.
-    var tweenPickups = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Quadratic.None, true, 0, 1000, true);    
+    var tweenPickups = game.add.tween(pickups).to( { x: 150 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);    
     // When the tween loops it calls descend
     tweenPickups.onLoop.add(descendFast, this);
 }
@@ -243,7 +243,7 @@ function descend() {
 
 function descendFast() {
 
-	pickups.y += 20;
+	pickups.y += 40;
 
 }
 
@@ -414,10 +414,13 @@ function enemyBulletHitsPlayer (player, enemyBullets) {
     }
 }
 
-function playerTouchesPickup (player, pickups) {
+function playerTouchesPickup (player, pickup) {
 
 	console.log('you touched the pickup!');
-	// update the bulletType
+	// kill the pickup
+	pickup.kill();	
+	// TODO: check what pickup type the player has touched
+	// hardcoding this for now: update the bulletType
 	bulletType = 2;	
 }
 
