@@ -219,7 +219,7 @@ function createPickups (pickupType){
     pickups.x = 25;
     pickups.y = 175;
     // start the pickup moving by moving the group.
-    var tweenPickups = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+    var tweenPickups = game.add.tween(pickups).to( { x: 175 }, 2000, Phaser.Easing.Quadratic.None, true, 0, 1000, true);    
     // When the tween loops it calls descend
     tweenPickups.onLoop.add(descendFast, this);
 }
@@ -301,7 +301,7 @@ function update() {
     game.physics.arcade.overlap(bullets, aliens, playerBulletHitsEnemy, null, this);    
     game.physics.arcade.overlap(player, enemyBullets, enemyBulletHitsPlayer, null, this); 
     game.physics.arcade.overlap(player, aliens, enemyBulletHitsPlayer, null, this);   
-
+    game.physics.arcade.overlap(player, pickups, playerTouchesPickup, null, this);
 
 }
 
@@ -414,7 +414,7 @@ function enemyBulletHitsPlayer (player,bullet) {
 
 function playerTouchesPickup (player) {
 
-
+	console.log('you touched the banana!');
 }
 
 
