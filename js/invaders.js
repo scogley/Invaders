@@ -18,8 +18,6 @@ function preload() {
     game.load.image('starfield', 'assets/starfield2.png');   
     game.load.image('knightHawks', 'assets/KNIGHT3.png');
     //game.load.image('raidenFonts', 'assets/Raiden Fighters (Seibu).png');
-
-
 }
 
 var player;
@@ -122,7 +120,7 @@ function create() {
     // stateText.visible = false;
 
 
-    for (var i = 0; i < 3; i++) 
+    for (var i = 0; i < 4; i++) 
     {
         var ship = lives.create(game.world.width - 100 + (30 * i), 60, 'ship');
         ship.anchor.setTo(0.5, 0.5);
@@ -306,6 +304,10 @@ function update() {
     game.physics.arcade.overlap(player, aliens, enemyBulletHitsPlayer, null, this);   
     game.physics.arcade.overlap(player, pickups, playerTouchesPickup, null, this);
 
+    // check if any aliens are alive
+    if (aliens.countLiving() == 0 ){
+    	console.log('no aliens alive!');
+    }
 }
 
 function render() {
@@ -323,7 +325,7 @@ function playerBulletHitsEnemy (bullet, alien) {
     if(alien.isBoss == true)
     {
         // TODO: replace hard coded value with property from player bullet
-        alien.damage(0.05);
+        alien.damage(0.02);
         bullet.kill();                
     }
     //  When a bullet hits a regular alien kill bullet and alien immediately
@@ -349,11 +351,6 @@ function playerBulletHitsEnemy (bullet, alien) {
 
         enemyBullets.callAll('kill',this);
         loadNextWave(this);
-        // stateText.text = " You Won, \n Click to restart";
-        // stateText.visible = true;
-
-        // //the "click to restart" handler
-        // game.input.onTap.addOnce(restart,this);
     }
 
 }
@@ -499,14 +496,11 @@ function resetBullet (bullet) {
 }
 
 function loadNextWave () {
-
     //  And brings the aliens back from the dead :)    
     waveCount ++;
 
     // randomize the enemy type
-    game.time.events.add(Phaser.Timer.SECOND * 4, function(){aliens.removeAll(); createAliens(game.rnd.between(1,5));})    
-    
-    
+    game.time.events.add(Phaser.Timer.SECOND * 4, function(){aliens.removeAll(); createAliens(game.rnd.between(1,5));}) 
 }
 
 function restart () {
